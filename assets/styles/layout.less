@@ -111,12 +111,19 @@ img {
 }
 
 header {
+  position:fixed;
+  top:0px;
   background-color: white;
   padding: 20px 0;
+  z-index: 100;
   .nav-logo {
     height: 20px;
     margin: 0;
   }
+}
+
+#server-side-content{
+  margin-top: 150px;
 }
 
 header .row,
@@ -189,13 +196,17 @@ header p {
 
 #ingredientsInput {
   height: 35px;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   border: 1px solid #ced4da;
   width: 280px;
 }
 
 #cookingMethods {
   height: 35px;
+}
+
+.cooking-methods{
+  margin-top: 1.5rem;
 }
 
 .glyphicon {
@@ -254,14 +265,34 @@ header p {
 
 .dropdown {
   float: right;
-  margin-right: 24%;
-  margin-top: 40px;
+  margin-right: 18.1rem;
+  margin-top: 1rem;
+}
+
+
+
+.dropdown {
+  float: right;
+  margin-right: 18.1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 1440px) {
+  .dropdown {
+    float: right;
+    margin-right: 23.1rem;
+    margin-top: 1rem;
+  }
 }
 
 .dropdown-menu {
   width: 700px;
   border-width: 3px;
   border-color: #CD5E4E;
+}
+
+.dropdown-menu{
+  transform: translate3d(-580px, 33px, 0px)!important;
 }
 
 .dropdown-item{
@@ -285,4 +316,12 @@ a:hover {
 
 a:active {
   text-decoration: none;
+}
+
+.bold-it{
+  font-weight:bold;
+}
+
+#dropdownStyleInResults{
+  transform: translate3d(-429px, -11px, 0px) !important;
 }

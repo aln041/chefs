@@ -81,6 +81,7 @@ class Filter extends React.Component {
         var ingredientBubbleList = this.props.searchedIngredients;
 
         var positionStyle = this.props.positionStyle ? this.props.positionStyle : "filter";
+        var dropdownStyleInResults = this.props.positionStyle ? "dropdownStyleInResults" : "blah";
         
 
         return (
@@ -88,20 +89,23 @@ class Filter extends React.Component {
                 <button className="btn btn-secondary dropdown-toggle" type="button" id={positionStyle} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Filters
                 </button>
-                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="filter">
+                <div className="dropdown-menu dropdown-menu-right" id={dropdownStyleInResults} style={{top: '18.5 rem'}} aria-labelledby="filter">
                     <form className="px-4 py-3 row">
                         <div className="form-group col-sm-6">
                             <label className="filter-label" for="ingredientsInput">Add Ingredients</label>
                             
+                            
+                            <div class="ingredient-filter-wrapper">
+                                <input type="ingredient" className="form-control" value={ingredientNameInput} onChange={this.handleIngredientInput} onKeyDown={this.handleIngredientSelection} id="ingredientsInput" placeholder="Type to search and add ingredients" />
+                                <AutoCompleteList list={autoCompleteDropdown} selector={this.state.selectedIngredientIndex} />
+                            </div>
                             <IngredientBubbleChain list={ingredientBubbleList} />
 
-                            <input type="ingredient" className="form-control" value={ingredientNameInput} onChange={this.handleIngredientInput} onKeyDown={this.handleIngredientSelection} id="ingredientsInput" placeholder="Type to search and add ingredients" />
-                            <AutoCompleteList list={autoCompleteDropdown} selector={this.state.selectedIngredientIndex} />
-                            
-                            <label className="filter-label" for="cookingMethods">Add Cooking Methods</label>
+                            <label className="filter-label cooking-methods" for="cookingMethods">Add Cooking Methods</label>
                             <button className="btn btn-secondary dropdown-item dropdown-toggle" type="button" id="cooking-method" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Choose Cooking Method
                             </button>
+                            
                             <ul className="dropdown-menu" aria-labelledby="diet">
                                 <li><input type="checkbox"/>Oven Bake</li>
                             </ul>
