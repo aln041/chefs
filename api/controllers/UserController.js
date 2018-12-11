@@ -1,3 +1,5 @@
+const UserFormClass = require('../helperss/formClasses/UserFormClass');
+const UserActionClass = require('../helperss/actionClasses/UserActionClass');
 
 module.exports= {
     viewUserProfile: async function(req, res) {
@@ -67,14 +69,12 @@ module.exports= {
         let vegan = req.param('vegan');
         let vegetarian = req.param('vegetarian');
 
-        let dietaryPreferences = [];
-        if (vegan) dietaryPreferences.push('vegan');
-        if (vegetarian) dietaryPreferences.push('vegetarian');
-
-        let user = (await User.findOne(req.session.userId).populateAll()).userProfile[0];
-        await UserProfile.update(user, {
-            dietaryPreferences: dietaryPreferences.join(','),
+        let dietaryPreferences = await UserFormClass.validateDietaryPreferencesForm({
+            vegan: vegan,
+            vegetarian: vegetarian,
         });
+
+        await UserActionClass.updateDietaryPreferences(req.session.userId, dietaryPreferences);
 
         return res.redirect('/account/dietary-preferences');
     },
@@ -105,16 +105,7 @@ module.exports= {
             return res.notFound();
         }
 
-        await UserProfile.addToCollection(currentUser.userProfile[0].id, 'followingList').members([userToFollow.id]);
-        await UserProfile.addToCollection(userToFollow.userProfile[0].id, 'followerList').members([currentUser.id]);
-
-        let communityRecipes = await CommunityRecipe.find({
-            select: 'id',
-            where: {
-                savedBy: userToFollow.id,
-            },
-        });
-        await CommunityRecipe.addToCollection(communityRecipes.map((obj) => obj.id), 'userProfile').members([currentUser.id]);
+        await UserActionClass.followUser(currentUser, userToFollow);
 
         return res.redirect('/user/' + userToFollow.id);
     },
@@ -142,16 +133,8 @@ module.exports= {
             return res.notFound();
         }
 
-        await UserProfile.removeFromCollection(currentUser.userProfile[0].id, 'followingList').members([userToFollow.id]);
-        await UserProfile.removeFromCollection(userToFollow.userProfile[0].id, 'followerList').members([currentUser.id]);
-        let communityRecipes = await CommunityRecipe.find({
-            select: 'id',
-            where: {
-                savedBy: userToFollow.id,
-            },
-        });
-        await CommunityRecipe.removeFromCollection(communityRecipes.map((obj) => obj.id), 'userProfile').members([currentUser.id]);
-
+        await UserActionClass.unfollowUser(currentUser, userToFollow);
+        
         return res.redirect('/user/' + userToFollow.id);
     },
 
